@@ -1,27 +1,27 @@
-use std::{sync::mpsc::Sender, thread, time::Duration};
+use std::{sync::mpsc::Sender, thread, time::{Duration, Instant}};
 
 use rppal::gpio::Gpio;
 
-// use gpio::GpioIn;
-
-// const GPIO_PIN_TRIGGER: u16 = 23;
-// const GPIO_PIN_ECHO: u16 = 24;
+const GPIO_PIN_TRIGGER: u8 = 23;
+const GPIO_PIN_ECHO: u8 = 24;
 
 pub fn run(tx: Sender<()>) {
-  let mut pin = Gpio::new().unwrap().get(23).unwrap().into_input();
-  // let mut gpio_trigger =
-  //   gpio::sysfs::SysFsGpioInput::open(GPIO_PIN_TRIGGER)
-  //   .expect("Could not open trigger gpio pin");
-
-  // let mut gpio_echo =
-  //   gpio::sysfs::SysFsGpioInput::open(GPIO_PIN_ECHO)
-  //   .expect("Could not open echo gpio pin");
+  let mut trigger = Gpio::new().unwrap().get(GPIO_PIN_TRIGGER).unwrap().into_output();
+  let mut echo = Gpio::new().unwrap().get(GPIO_PIN_ECHO).unwrap().into_input();
 
   loop {
-    println!("{:?}", pin.is_high());
-    // let value_trigger = gpio_trigger.read_value().expect("Could not read gpio pin");
-    // let value_echo = gpio_echo.read_value().expect("Could not read gpio pin");
-    // println!("{value_trigger:?}, {value_echo:?}");
+    trigger.set_low();
+    thread::sleep(Duration::from_micros(5));
+    trigger.set_high();
+    thread::sleep(Duration::from_micros(10));
+    trigger.set_low();
+    let now = Instant::now();
+    while (echo.is_high()) {}
+    let time_elapsed = now.elapsed();
+
+    println!("{:?}", time_elapsed);
+
+
     thread::sleep(Duration::from_secs(1));
     tx.send(()).unwrap();
   }
