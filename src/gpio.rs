@@ -10,7 +10,7 @@ pub fn run(tx: Sender<()>) {
   loop {
     println!("{:?}", pin.is_high());
 
-    thread::sleep(Duration::from_secs(1));
+    thread::sleep(Duration::from_millis(10));
     tx.send(()).unwrap();
   }
 }
