@@ -16,7 +16,7 @@ pub fn run(tx: Sender<()>) {
     thread::sleep(Duration::from_micros(10));
     trigger.set_low();
     let now = Instant::now();
-    while (echo.is_high()) {}
+    while echo.is_high() {}
     let time_elapsed = now.elapsed();
 
     println!("{:?}", time_elapsed);
