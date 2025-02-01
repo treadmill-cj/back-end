@@ -16,11 +16,10 @@ pub fn run(tx: Sender<()>) {
     thread::sleep(Duration::from_micros(10));
     trigger.set_low();
     println!("triggered");
-    while echo.is_low() {}
-    println!("went high");
     let now = Instant::now();
-    while echo.is_high() {}
-    println!("went low");
+    for _ in 0..50 {
+      println!("{}", echo.is_high());
+    }
     let time_elapsed = now.elapsed();
 
     println!("{:?}", time_elapsed);
