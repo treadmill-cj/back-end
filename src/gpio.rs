@@ -17,9 +17,8 @@ pub fn run(tx: Sender<()>) {
     trigger.set_low();
     println!("triggered");
     let now = Instant::now();
-    for _ in 0..50 {
-      println!("{}", echo.is_high());
-    }
+    while echo.is_high() {}
+    println!("went low");
     let time_elapsed = now.elapsed();
 
     println!("{:?}", time_elapsed);
