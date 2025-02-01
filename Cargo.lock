@@ -262,12 +262,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "gpio"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4fe6783270536547ac473c9d2ae5a7e0e715ea43f29004ced47fbd1c1372d2c7"
-
-[[package]]
 name = "hermit-abi"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -706,6 +700,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "41cc0f7e4d5d4544e8861606a285bb08d3e70712ccc7d2b84d7c0ccfaf4b05ce"
 
 [[package]]
+name = "rppal"
+version = "0.22.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1ce3b019009cff02cb6b0e96e7cc2e5c5b90187dc1a490f8ef1521d0596b026"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "rustc_version"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -981,7 +984,7 @@ checksum = "efd1f82c56340fdf16f2a953d7bda4f8fdffba13d93b00844c25572110b26079"
 name = "treadmill"
 version = "0.1.0"
 dependencies = [
- "gpio",
+ "rppal",
  "tiny_http",
  "websocket",
 ]
