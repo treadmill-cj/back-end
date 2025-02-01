@@ -11,8 +11,8 @@ pub fn run(tx: Sender<()>) {
     while pin.is_high() {} // wait
     tx.send(()).unwrap();
     println!("BAM!!!");
-    thread::sleep(Duration::from_millis(500));
+    thread::sleep(Duration::from_millis(200));
     while pin.is_low() {} // wait to reset
-    thread::sleep(Duration::from_millis(500));
+    thread::sleep(Duration::from_millis(200));
   }
 }
