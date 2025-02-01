@@ -1,6 +1,6 @@
-use std::sync::{Arc, Mutex};
+use std::{str::FromStr, sync::{Arc, Mutex}};
 
-use tiny_http::{Response, Server};
+use tiny_http::{Response, Server, Header};
 
 use crate::CalcData;
 
@@ -22,7 +22,8 @@ pub fn run(calculated_data: Arc<Mutex<Vec<CalcData>>>) {
           }
           total_str.pop(); // remove last comma
           total_str += "]";
-          request.respond(Response::from_string(total_str)).unwrap()
+          let h = Header::from_str("Access-Control-Allow-Origin: *").unwrap();
+          request.respond(Response::from_string(total_str).with_header(h)).unwrap()
         },
         _ => request.respond(Response::from_string("404")).unwrap()
       }
