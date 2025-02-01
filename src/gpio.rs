@@ -5,7 +5,7 @@ use gpio::GpioIn;
 const GPIO_PIN_TRIGGER: u16 = 23;
 const GPIO_PIN_ECHO: u16 = 24;
 
-pub fn run(tx: Sender<Duration>) {
+pub fn run(tx: Sender<()>) {
   let mut gpio_trigger =
     gpio::sysfs::SysFsGpioInput::open(GPIO_PIN_TRIGGER)
     .expect("Could not open trigger gpio pin");

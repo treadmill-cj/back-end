@@ -5,12 +5,17 @@ mod calc;
 mod api;
 mod ws;
 
+#[derive(Clone, Copy)]
 struct CalcData {
-
+  total_distance: f64,
+  total_time: Duration,
+  speed: f64,
 }
 
+const BELT_LEN: f64 = 5.0;
+
 fn main() {
-  let (from_gpio, to_calc) = mpsc::channel::<Duration>();
+  let (from_gpio, to_calc) = mpsc::channel::<()>();
   let (from_calc, to_ws) = mpsc::channel::<CalcData>();
 
   let calculated_data: Arc<Mutex<Vec<CalcData>>> = Arc::new(Mutex::new(Vec::new()));
