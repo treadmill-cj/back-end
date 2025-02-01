@@ -5,12 +5,12 @@ use rppal::gpio::Gpio;
 const GPIO_PIN: u8 = 15;
 
 pub fn run(tx: Sender<()>) {
-  let mut pin = Gpio::new().unwrap().get(GPIO_PIN).unwrap().into_input();
+  let mut pin = Gpio::new().unwrap().get(GPIO_PIN).unwrap().into_input_pullup();
 
   loop {
-    println!("{:?}", pin.is_high());
-
-    thread::sleep(Duration::from_millis(10));
+    while pin.is_high() {} // wait
     tx.send(()).unwrap();
+    println!("BAM!!!");
+    while pin.is_low() {} // wait to reset
   }
 }
