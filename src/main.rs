@@ -8,7 +8,7 @@ mod ws;
 #[derive(Clone, Copy)]
 struct CalcData {
   total_distance: f64,
-  total_time: Duration,
+  total_time_ms: u128,
   speed: f64,
 }
 

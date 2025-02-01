@@ -24,7 +24,7 @@ pub fn run(rx: Receiver<()>, tx: Sender<CalcData>, calculated_data: Arc<Mutex<Ve
     let speed = BELT_LEN / duration.as_millis() as f64 * 1000.0;
 
     // forward data to api and websocket
-    let data = CalcData { total_distance, total_time: elapsed, speed };
+    let data = CalcData { total_distance, total_time_ms: elapsed.as_millis(), speed };
     tx.send(data).unwrap();
     calculated_data.lock().unwrap().push(data);
   }
