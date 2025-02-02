@@ -13,7 +13,7 @@ pub struct CalcData {
   speed: f64,
 }
 
-const BELT_LEN: f64 = 5.0;
+const BELT_LEN: f64 = 6.0;
 
 fn main() {
   let (from_gpio, to_calc) = mpsc::channel::<()>();
