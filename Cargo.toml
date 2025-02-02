@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rppal = "0.22.1"
 tiny_http = "0.12.0"
 websocket = "0.27.1"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+rppal = "0.22.1"

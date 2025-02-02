@@ -10,7 +10,8 @@ pub fn run(calculated_data: Arc<Mutex<Vec<CalcData>>>) {
   for request in server.incoming_requests() {
 
       match request.url() {
-        "/api" => {
+        "/all" => {
+          println!("api data");
           let calculated_data = calculated_data.lock().unwrap();
           let mut total_str = String::from("[");
           for data in calculated_data.iter() {

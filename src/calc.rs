@@ -4,10 +4,9 @@ use crate::{CalcData, BELT_LEN};
 
 
 
-pub fn run(rx: Receiver<()>, tx: Sender<CalcData>, calculated_data: Arc<Mutex<Vec<CalcData>>>) {
+pub fn run(rx: Receiver<()>, tx: Sender<CalcData>, calculated_data: Arc<Mutex<Vec<CalcData>>>, now: Arc<Mutex<Instant>>) {
   let mut total_distance: f64 = 0.0;
 
-  let now = Instant::now();
   let mut last_dur = Duration::from_secs(0);
 
   loop {
@@ -15,9 +14,20 @@ pub fn run(rx: Receiver<()>, tx: Sender<CalcData>, calculated_data: Arc<Mutex<Ve
     rx.recv().unwrap();
 
     // get time since last event
-    let elapsed = now.elapsed();
-    let duration = elapsed - last_dur;
-    last_dur = elapsed;
+    let duration;
+    let elapsed = now.lock().unwrap().elapsed();
+    if last_dur > elapsed { // reset happened
+      last_dur = elapsed;
+      duration = elapsed;
+    } else {
+      duration = elapsed - last_dur;
+      last_dur = elapsed;
+    }
+
+    // stop two events in a row with infinite speed
+    if elapsed.as_millis() < 100 {
+      continue;
+    }
 
     // calculations
     total_distance += BELT_LEN;
@@ -25,6 +35,7 @@ pub fn run(rx: Receiver<()>, tx: Sender<CalcData>, calculated_data: Arc<Mutex<Ve
 
     // forward data to api and websocket
     let data = CalcData { total_distance, total_time_ms: elapsed.as_millis(), speed };
+    println!("data queued");
     tx.send(data).unwrap();
     calculated_data.lock().unwrap().push(data);
   }
