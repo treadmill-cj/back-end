@@ -19,7 +19,7 @@ pub fn run(tx: Sender<()>, calculated_data: Arc<Mutex<Vec<CalcData>>>) {
   
     'a: loop {
       while pin.is_high() { // wait
-        if pin_stop.is_low() {break a;}
+        if pin_stop.is_low() {break 'a;}
       }
       tx.send(()).unwrap();
       thread::sleep(Duration::from_millis(200));
