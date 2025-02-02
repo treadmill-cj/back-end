@@ -8,8 +8,10 @@ pub fn run(rx: Receiver<CalcData>, connected: Arc<Mutex<bool>>) {
   let server = Server::bind("127.0.0.1:5000").unwrap();
 
 	'connection: for request in server.filter_map(Result::ok) {
+    println!("1 ws connection");
 
     let mut client = request.use_protocol("rust-websocket").accept().unwrap();
+    println!("2 accepted");
 
     *connected.lock().unwrap() = true;
 
@@ -20,10 +22,10 @@ pub fn run(rx: Receiver<CalcData>, connected: Arc<Mutex<bool>>) {
         data.total_time_ms,
         data.speed
       );
-      println!("Sending data: {str}");
+      println!("3 Sending data: {str}");
       let message = OwnedMessage::Text(str);
       match client.send_message(&message) {
-        Ok(_) => println!("ok"),
+        Ok(_) => println!("4 ok"),
         Err(e) => {
           println!("{e:?}");
           *connected.lock().unwrap() = false;
