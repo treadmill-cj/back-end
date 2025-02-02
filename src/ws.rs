@@ -11,9 +11,6 @@ pub fn run(rx: Receiver<CalcData>, connected: Arc<Mutex<bool>>) {
 
     let mut client = request.use_protocol("rust-websocket").accept().unwrap();
 
-    let ip = client.peer_addr().unwrap();
-
-    println!("Connection from {}", ip);
     *connected.lock().unwrap() = true;
 
     loop {
