@@ -2,7 +2,7 @@ use std::{sync::{mpsc::{Receiver, Sender}, Arc, Mutex}, time::{Duration, Instant
 
 use crate::{CalcData, BELT_LEN};
 
-pub fn run(rx: Receiver<()>, tx: Sender<CalcData>, calculated_data: Arc<Mutex<Vec<CalcData>>>, now: Arc<Mutex<Instant>>, total_distance: Arc<Mutex<f64>>) {
+pub fn run(rx: Receiver<()>, tx: Sender<CalcData>, calculated_data: Arc<Mutex<Vec<CalcData>>>, now: Arc<Mutex<Instant>>, total_distance: Arc<Mutex<f64>>, connected: Arc<Mutex<bool>>) {
 
   let mut last_dur = Duration::from_secs(0);
 
@@ -32,8 +32,9 @@ pub fn run(rx: Receiver<()>, tx: Sender<CalcData>, calculated_data: Arc<Mutex<Ve
 
     // forward data to api and websocket
     let data = CalcData { total_distance: *total_distance.lock().unwrap(), total_time_ms: elapsed.as_millis(), speed };
-    println!("data queued");
-    tx.send(data).unwrap();
+    if *connected.lock().unwrap() {
+      tx.send(data).unwrap();
+    }
     calculated_data.lock().unwrap().push(data);
   }
 }

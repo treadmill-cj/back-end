@@ -29,10 +29,13 @@ fn main() {
   let calculated_data_clone = Arc::clone(&calculated_data);
   let calculated_data_clone2 = Arc::clone(&calculated_data);
 
+  let websocket_connected = Arc::new(Mutex::new(false));
+  let websocket_connected_copy = Arc::clone(&websocket_connected);
+
   thread::spawn(|| gpio::run(from_gpio, calculated_data, start_time, total_time));
-  thread::spawn(|| calc::run(to_calc, from_calc, calculated_data_clone, start_time_clone, total_time_clone));
+  thread::spawn(|| calc::run(to_calc, from_calc, calculated_data_clone, start_time_clone, total_time_clone, websocket_connected));
   thread::spawn(|| api::run(calculated_data_clone2));
-  thread::spawn(|| ws::run(to_ws));
+  thread::spawn(|| ws::run(to_ws, websocket_connected_copy));
 
   loop {
     thread::sleep(Duration::from_secs(100));

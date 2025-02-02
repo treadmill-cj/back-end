@@ -1,19 +1,20 @@
-use std::sync::mpsc::Receiver;
+use std::sync::{mpsc::Receiver, Arc, Mutex};
 
 use websocket::{sync::Server, OwnedMessage};
 
 use crate::CalcData;
 
-pub fn run(rx: Receiver<CalcData>) {
+pub fn run(rx: Receiver<CalcData>, connected: Arc<Mutex<bool>>) {
   let server = Server::bind("127.0.0.1:5000").unwrap();
 
-	for request in server.filter_map(Result::ok) {
+	'connection: for request in server.filter_map(Result::ok) {
 
     let mut client = request.use_protocol("rust-websocket").accept().unwrap();
 
     let ip = client.peer_addr().unwrap();
 
     println!("Connection from {}", ip);
+    *connected.lock().unwrap() = true;
 
     loop {
       let data = rx.recv().unwrap();
@@ -24,7 +25,10 @@ pub fn run(rx: Receiver<CalcData>) {
       );
       println!("Sending data: {str}");
       let message = OwnedMessage::Text(str);
-      client.send_message(&message).unwrap();
+      match client.send_message(&message) {
+        Ok(_) => (),
+        Err(_) => continue 'connection,
+      }
     }
 	}
 }
