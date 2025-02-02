@@ -11,8 +11,8 @@ pub fn run(calculated_data: Arc<Mutex<Vec<CalcData>>>) {
 
       match request.url() {
         "/all" => {
-          println!("api data");
           let calculated_data = calculated_data.lock().unwrap();
+          println!("api data:\n{:?}", calculated_data);
           let mut total_str = String::from("[");
           for data in calculated_data.iter() {
             total_str += &format!("{{\"total_distance\": {}, \"total_time_ms\": {}, \"speed\": {}}},",

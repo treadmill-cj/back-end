@@ -6,6 +6,7 @@ mod api;
 mod ws;
 
 #[derive(Clone, Copy)]
+#[derive(Debug)]
 pub struct CalcData {
   total_distance: f64,
   total_time_ms: u128,
