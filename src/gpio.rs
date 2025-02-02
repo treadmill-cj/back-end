@@ -1,6 +1,8 @@
-use std::{sync::mpsc::Sender, thread, time::{Duration, Instant}};
+use std::{sync::{mpsc::Sender, Arc, Mutex}, thread, time::{Duration, Instant}};
 
 use rppal::gpio::Gpio;
+
+use crate::CalcData;
 
 const GPIO_PIN: u8 = 15;
 const GPIO_PIN_START: u8 = 15;
