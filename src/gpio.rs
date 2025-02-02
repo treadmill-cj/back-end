@@ -4,9 +4,9 @@ use rppal::gpio::Gpio;
 
 use crate::CalcData;
 
-const GPIO_PIN: u8 = 15;
+const GPIO_PIN: u8 = 14;
 const GPIO_PIN_START: u8 = 15;
-const GPIO_PIN_STOP: u8 = 15;
+const GPIO_PIN_STOP: u8 = 18;
 
 pub fn run(tx: Sender<()>, calculated_data: Arc<Mutex<Vec<CalcData>>>) {
   let mut pin = Gpio::new().unwrap().get(GPIO_PIN).unwrap().into_input_pullup();
