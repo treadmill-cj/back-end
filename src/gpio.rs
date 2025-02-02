@@ -31,6 +31,7 @@ pub fn run(tx: Sender<()>, calculated_data: Arc<Mutex<Vec<CalcData>>>, time: Arc
           break 'a;
         }
       }
+      println!("Bam!");
       tx.send(()).unwrap();
       thread::sleep(Duration::from_millis(200));
       while pin.is_low() {} // wait to reset
