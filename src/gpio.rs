@@ -22,10 +22,14 @@ pub fn run(tx: Sender<()>, calculated_data: Arc<Mutex<Vec<CalcData>>>, time: Arc
       *dist.lock().unwrap() = 0.0;
     }
     while pin_start.is_high() {} // wait until it is started
+    println!("start");
   
     'a: loop {
       while pin.is_high() { // wait
-        if pin_stop.is_low() {break 'a;}
+        if pin_stop.is_low() {
+          println!("stop");
+          break 'a;
+        }
       }
       tx.send(()).unwrap();
       thread::sleep(Duration::from_millis(200));
