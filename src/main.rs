@@ -20,10 +20,11 @@ fn main() {
 
   let calculated_data: Arc<Mutex<Vec<CalcData>>> = Arc::new(Mutex::new(Vec::new()));
   let calculated_data_clone = Arc::clone(&calculated_data);
+  let calculated_data_clone2 = Arc::clone(&calculated_data);
 
-  thread::spawn(|| gpio::run(from_gpio));
-  thread::spawn(|| calc::run(to_calc, from_calc, calculated_data));
-  thread::spawn(|| api::run(calculated_data_clone));
+  thread::spawn(|| gpio::run(from_gpio, calculated_data));
+  thread::spawn(|| calc::run(to_calc, from_calc, calculated_data_clone));
+  thread::spawn(|| api::run(calculated_data_clone2));
   thread::spawn(|| ws::run(to_ws));
 
   loop {
