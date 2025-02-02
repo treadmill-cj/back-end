@@ -23,8 +23,12 @@ pub fn run(rx: Receiver<CalcData>, connected: Arc<Mutex<bool>>) {
       println!("Sending data: {str}");
       let message = OwnedMessage::Text(str);
       match client.send_message(&message) {
-        Ok(_) => (),
-        Err(_) => continue 'connection,
+        Ok(_) => println!("ok"),
+        Err(e) => {
+          println!("{e}");
+          *connected.lock().unwrap() = false;
+          continue 'connection
+        },
       }
     }
 	}
