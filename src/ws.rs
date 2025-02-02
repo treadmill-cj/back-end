@@ -25,7 +25,7 @@ pub fn run(rx: Receiver<CalcData>, connected: Arc<Mutex<bool>>) {
       match client.send_message(&message) {
         Ok(_) => println!("ok"),
         Err(e) => {
-          println!("{e}");
+          println!("{e:?}");
           *connected.lock().unwrap() = false;
           continue 'connection
         },
